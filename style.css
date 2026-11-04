@@ -189,6 +189,10 @@ body.in-volet .leaders { opacity: 0; transition: opacity 200ms ease; }
 .note { position: absolute; z-index: 2; pointer-events: auto; font-size: max(11px, calc(var(--fs, 16) * 100vw / 1440)); line-height: 1.4; color: var(--ink); }
 .slide .note { opacity: 0; transition: opacity 500ms ease 200ms; }
 .volet.show .slide .note { opacity: 1; }
+/* documents : comme le texte de gauche, les boîtes libres s'effacent quand on feuillette
+   et reviennent quand le document est refermé */
+.slide.doc .note { translate: 0 0; transition: opacity 350ms ease, translate 500ms var(--out); }
+.volet.show .slide.doc.open .note { opacity: 0; translate: -28px 0; pointer-events: none; }
 .addcard { gap: 6px; align-content: center; cursor: pointer; transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease; }
 .addcard .plus { font-size: 54px; font-weight: 200; line-height: 1; }
 .addcard small { font-size: 12px; color: var(--ink-3); }
