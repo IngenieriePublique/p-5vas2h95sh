@@ -49,6 +49,9 @@ window.PF_EDIT = true;
       try { c = JSON.parse(await gh(`/contents/content.json?ref=${CFG.branch}`, { raw: true, headers: { Accept: 'application/vnd.github.raw+json' } })); }
       catch (e) { toast('Lecture depuis GitHub impossible, version du site utilisée. ' + e.message, 6000); }
     }
+    if (!c) {   // sans clé : la version du dépôt, sinon celle du site
+      try { const r = await fetch(`https://raw.githubusercontent.com/${CFG.owner}/${CFG.repo}/${CFG.branch}/content.json?t=${Date.now()}`, { cache: 'no-store' }); if (r.ok) c = await r.json(); } catch (_) {}
+    }
     if (!c) c = await (await fetch('content.json', { cache: 'no-store' })).json();
     c.labels = c.labels || { back: 'Volets' };
     c.home.notes = c.home.notes || [];

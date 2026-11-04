@@ -10,7 +10,23 @@
 const PF = window.PF = window.PF || {};
 const EDIT = !!window.PF_EDIT;
 PF.blobs = PF.blobs || {};                       // fichiers ajoutés dans l'atelier, pas encore en ligne
-const U = p => (p && PF.blobs[p]) || p || '';
+/* Le contenu est lu directement dans le dépôt GitHub (raw.githubusercontent.com) : une
+   publication de l'atelier apparaît en une à deux minutes, sans attendre que GitHub Pages
+   ait remis le site en ligne. Les fichiers pas encore en ligne sont lus au même endroit. */
+const REPO = (() => {
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/i); if (!m) return null;
+  const seg = location.pathname.split('/').filter(Boolean);
+  return { owner: m[1], repo: seg.length && !/\.html?$/i.test(seg[0]) ? seg[0] : location.hostname };
+})();
+const RAW = REPO && `https://raw.githubusercontent.com/${REPO.owner}/${REPO.repo}/main/`;
+const LATE = new Set();                          // fichiers publiés mais pas encore servis par Pages
+const U = p => (p && PF.blobs[p]) || (p && LATE.has(p) ? RAW + p.split('/').map(encodeURIComponent).join('/') : p) || '';
+const filesOf = c => {
+  const s = new Set();
+  (c.volets || []).forEach(v => { if (v.calque) s.add(v.calque); (v.items || []).forEach(it => [it.src, it.hd, ...(it.pages || [])].forEach(p => p && s.add(p))); });
+  return s;
+};
+const getJSON = (url, opt) => fetch(url, opt).then(r => (r.ok ? r.json() : null)).catch(() => null);
 const DOC_RATIO = 864 / 1248;
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -22,13 +38,17 @@ const bind = path => `data-bind="${path}"`;
 const num = (x, d = 0) => (typeof x === 'number' && isFinite(x) ? x : d);
 
 (async function boot() {
-  let C;
-  try {
-    C = PF.loadContent ? await PF.loadContent() : await (await fetch('content.json', { cache: 'no-cache' })).json();
-  } catch (err) {
+  // version servie par Pages (peut avoir quelques minutes de retard) et version du dépôt
+  const deployed = getJSON('content.json', { cache: 'no-cache' });
+  const fresh = PF.loadContent ? PF.loadContent().catch(() => null)
+    : RAW ? getJSON(`${RAW}content.json?t=${Math.floor(Date.now() / 30000)}`, { cache: 'no-cache' }) : null;
+  const [L, F] = await Promise.all([deployed, fresh]);
+  const C = F || L;
+  if (!C) {
     document.body.insertAdjacentHTML('beforeend', '<p style="position:fixed;inset:auto 0 40%;text-align:center;color:#828282">Contenu indisponible.</p>');
-    throw err;
+    return;
   }
+  if (RAW && L && F) { const on = filesOf(L); filesOf(F).forEach(p => { if (!on.has(p)) LATE.add(p); }); }
   PF.C = C;
   start(C);
 })();
