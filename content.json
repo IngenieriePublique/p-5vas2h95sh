@@ -13,7 +13,7 @@
   {
    "id": "cartographique",
    "name": "Volet Cartographique",
-   "count": "2 cartes",
+   "count": "7 cartes",
    "kind": "map",
    "calque": "assets/calques/calque-cartographique.png",
    "emptyText": "Les cartes seront présentées ici.",
@@ -32,7 +32,9 @@
      ],
      "notes": [],
      "txt": {
-      "w": 19.98
+      "w": 19.98,
+      "dx": 0.57,
+      "dy": -4.17
      }
     },
     {
@@ -41,13 +43,127 @@
      "hd": "assets/carte1_hd.jpg",
      "hdh": 2551,
      "ratio": 1.4111762676785098,
-     "title": "Foncier disponible au Fleix",
+     "title": "Cartographie de la disponibilité foncière",
      "sub": "Stage à la CA Bergeracoise - Août 2026",
      "tags": [
-      "QGIS",
-      "Analyse foncière"
+      "SIG",
+      "Analyse foncière",
+      "Données cadastrales"
      ],
-     "notes": []
+     "notes": [
+      {
+       "text": "Livrable :\nUn plan détaillé au niveau parcellaire du foncier disponible par commune de l’agglomération. Outil mobilisable par les élus pour engager les réflexions face\naux contraintes actuelles d’utilisation du foncier. 38 communes.",
+       "x": 71.88,
+       "y": 58.58,
+       "w": 16.96,
+       "fs": 13,
+       "wt": 300
+      }
+     ],
+     "txt": {
+      "dx": 0.47,
+      "dy": -3.16,
+      "w": 16.8
+     }
+    },
+    {
+     "type": "map",
+     "src": "assets/cartes/distance-aux-commerces-des-habit-mw2fjrst.jpg",
+     "hd": "assets/cartes/distance-aux-commerces-des-habit-mw2fjrst_hd.jpg",
+     "hdh": 2596,
+     "ratio": 1.4036979969183359,
+     "title": "Cartographie de l'accès aux commerces ",
+     "sub": "Stage CC Confluent et Coteaux de Prayssas - Juin 2026",
+     "tags": [
+      "SIG",
+      "Données carroyées"
+     ],
+     "notes": [],
+     "txt": {
+      "dx": 0.26,
+      "dy": -4.58
+     }
+    },
+    {
+     "type": "map",
+     "src": "assets/cartes/cartographie-des-friches-4cp-mw2fuw6z.jpg",
+     "hd": "assets/cartes/cartographie-des-friches-4cp-mw2fuw6z_hd.jpg",
+     "hdh": 2828,
+     "ratio": 1.4143646408839778,
+     "title": "Cartographie des friches",
+     "sub": "Stage CC Confluent et Coteaux de Prayssas - Juin 2026",
+     "tags": [
+      "SIG",
+      "Données CEREMA, ANCT"
+     ],
+     "notes": [],
+     "txt": {
+      "dx": 0.42,
+      "dy": -5.67,
+      "w": 18.89
+     }
+    },
+    {
+     "type": "map",
+     "src": "assets/cartes/friches-bergerac-mw2g3uvw.jpg",
+     "hd": "assets/cartes/friches-bergerac-mw2g3uvw_hd.jpg",
+     "hdh": 2828,
+     "ratio": 1.4143145161290323,
+     "title": "Cartographie des friches",
+     "sub": "Stage CA Bergeracoise - Août 2026",
+     "tags": [
+      "SIG",
+      "Données CEREMA",
+      "Données locale d'urbanisme"
+     ],
+     "notes": [],
+     "txt": {
+      "dx": -0.61,
+      "dy": -6.33,
+      "w": 18.89
+     }
+    },
+    {
+     "type": "map",
+     "src": "assets/cartes/sante-de-la-vegetation-cab-mw2fxmvy.jpg",
+     "hd": "assets/cartes/sante-de-la-vegetation-cab-mw2fxmvy_hd.jpg",
+     "hdh": 2828,
+     "ratio": 1.4143145161290323,
+     "title": "Télédétection",
+     "sub": "Stage CA Bergeracoise - Août 2026",
+     "tags": [
+      "Données satellitaire",
+      "Calcul raster"
+     ],
+     "notes": [],
+     "txt": {
+      "dx": -0.06,
+      "dy": -5.17,
+      "w": 13.68
+     }
+    },
+    {
+     "type": "map",
+     "src": "assets/cartes/tableau-de-bord-observatoire-de--mw2g9450.jpg",
+     "hd": "assets/cartes/tableau-de-bord-observatoire-de--mw2g9450_hd.jpg",
+     "hdh": 930,
+     "ratio": 1.782795698924731,
+     "title": "Observatoire local de l'emploi",
+     "sub": "Stage CC Confluent et Coteaux de Prayssas - Juin 2026",
+     "tags": [
+      "Microsoft PowerBI",
+      "Données ANCT, Urssaf, Insee"
+     ],
+     "notes": [
+      {
+       "text": "Livrable :\nTableau de bord interactif et actualisable de 6 pages regroupant les sources de données d’emploi du territoire. Ajout d’un focus sur la ZAE Confluence et sur les emplois du commerce.",
+       "x": 72.18,
+       "y": 55.75,
+       "w": 18,
+       "fs": 13,
+       "wt": 300
+      }
+     ]
     }
    ],
    "emptyTitle": "En préparation",
@@ -56,7 +172,7 @@
   {
    "id": "ingenierie",
    "name": "Volet Ingénierie territoriale",
-   "count": "2 documents",
+   "count": "4 documents",
    "kind": "doc",
    "calque": "assets/calques/calque-ingenierie.png",
    "emptyText": "Les documents seront présentés ici.",
@@ -92,7 +208,21 @@
       "Ingénierie de projet",
       "Évaluation financière"
      ],
-     "notes": []
+     "notes": [
+      {
+       "text": "Dans le cadre du cours revitalisation des territoires. Diagnostic préalable, mise en évidence des enjeux hiérachisés, conception d'un projet y répondant, préprogrammation, programmation opérationnelle. Sujet : Conception d'un projet de revitalisation d'un centre-bourg rural.",
+       "x": 70.1,
+       "y": 74.08,
+       "w": 16.8,
+       "fs": 13,
+       "wt": 300
+      }
+     ],
+     "txt": {
+      "dx": -0.05,
+      "dy": 1.83,
+      "w": 19.85
+     }
     },
     {
      "type": "doc",
@@ -114,13 +244,98 @@
       "assets/doc1/p15.jpg"
      ],
      "ratio": 0.6923076923076923,
-     "title": "Le Pays basque en 12 indicateurs",
-     "sub": "Portrait de territoire pour Bidasoa activa - Avril 2026",
+     "title": "Portrait de territoire",
+     "sub": "Stage-projet d'étude en partenariat avec Bidasoa Activa - Avril 2026",
      "tags": [
       "Diagnostic territorial",
-      "Analyse statistique"
+      "Analyse statistique",
+      "Travail de groupe"
      ],
-     "notes": []
+     "notes": [
+      {
+       "text": "Livrables :\nUn fichier de données, une note de synthèse et ce portrait de territoire pour l'enrichissement d'un observatoire territorial du pays basque espagnol en appui aux actions transfrontalières.\nNote obtenue : 18/20",
+       "x": 69.73,
+       "y": 76.08,
+       "w": 18,
+       "fs": 13,
+       "wt": 300
+      }
+     ],
+     "txt": {
+      "dx": -0.05,
+      "dy": 1.83
+     }
+    },
+    {
+     "type": "doc",
+     "pages": [
+      "assets/docs/percy-vedrenne-cessou-paravis-no-mw2hj6f8/p01.jpg",
+      "assets/docs/percy-vedrenne-cessou-paravis-no-mw2hj6f8/p02.jpg",
+      "assets/docs/percy-vedrenne-cessou-paravis-no-mw2hj6f8/p03.jpg",
+      "assets/docs/percy-vedrenne-cessou-paravis-no-mw2hj6f8/p04.jpg",
+      "assets/docs/percy-vedrenne-cessou-paravis-no-mw2hj6f8/p05.jpg"
+     ],
+     "ratio": 0.6923076923076923,
+     "title": "Analyse de finance locale",
+     "sub": "M1 Ingénierie du Développement Territorial - Mars 2026",
+     "tags": [
+      "Fiscalité locale",
+      "Veille des débats parlementaires",
+      "Travail de groupe"
+     ],
+     "notes": [],
+     "txt": {
+      "dx": -0.1,
+      "dy": 1.83
+     }
+    },
+    {
+     "type": "doc",
+     "pages": [
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p01.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p02.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p03.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p04.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p05.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p06.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p07.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p08.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p09.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p10.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p11.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p12.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p13.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p14.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p15.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p16.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p17.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p18.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p19.jpg",
+      "assets/docs/g5-percy-frulio-paravis-bidault-mw2gw3we/p20.jpg"
+     ],
+     "ratio": 0.707442258340462,
+     "title": "Diagnostic territorial",
+     "sub": "M1 Ingénierie du Développement Territorial - Novembre 2025",
+     "tags": [
+      "Diagnostic territorial",
+      "Construction d'indicateur statistique",
+      "Cartographie",
+      "Travail de groupe"
+     ],
+     "notes": [
+      {
+       "text": "Dans le cadre du cours diagnostic territoria. Mobilisation des données localisées et construction d'indicateurs pour le diagnostic du territoire. Sujet : L'attractivité démographique du Grand Cubzaguais.\nNote obtenue : 16/20",
+       "x": 70.68,
+       "y": 75.91,
+       "w": 18,
+       "fs": 13,
+       "wt": 300
+      }
+     ],
+     "txt": {
+      "dx": 0.36,
+      "dy": 1.75
+     }
     }
    ],
    "emptyTitle": "En préparation",
