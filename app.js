@@ -248,7 +248,7 @@ function start(C) {
       txt = `<h2 ${bind(`volets.${k}.emptyTitle`)}>${esc(v.emptyTitle)}</h2><p class="sub" ${bind(`volets.${k}.emptySub`)}>${esc(v.emptySub)}</p>`;
       obj = `<div class="blank" ${bind(`volets.${k}.emptyText`)}>${esc(v.emptyText)}</div>`;
     } else if (s.kind === 'add') {
-      obj = '<div class="blank addcard ed-ui"><span class="plus">+</span><span>Ajouter un élément</span><small>Déposez une image ou un PDF ici, ou cliquez</small></div>';
+      obj = '<div class="blank addcard ed-ui"><span class="plus">+</span><span>Ajouter un élément</span><small>Déposez une image (JPG, PNG) ou un PDF ici, ou cliquez</small></div>';
     } else {
       txt = `<h2 ${bind(p + '.title')}>${esc(it.title)}</h2><p class="sub" ${bind(p + '.sub')}>${esc(it.sub)}</p>` +
         ((it.tags || []).length ? `<ul>${it.tags.map((g, n) => `<li ${bind(`${p}.tags.${n}`)}>${esc(g)}</li>`).join('')}</ul>` : '');

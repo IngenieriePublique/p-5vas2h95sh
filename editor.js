@@ -202,9 +202,27 @@ window.PF_EDIT = true;
     im.src = url; await im.decode();
     return im;
   }
-  // une image → version écran (2000 px) + version détaillée pour le zoom (4000 px)
+  // première page d'un PDF dessinée en grand (pour une carte ou un motif de calque reçus en PDF)
+  async function pdfFirstPage(file, longEdge = 4000) {
+    const lib = window.pdfjsLib;
+    if (!lib) throw new Error('lecteur PDF non chargé');
+    lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const m = modal('<h3>Conversion du PDF en image</h3><p class="ed-prog">Lecture de la première page…</p>');
+    try {
+      const pdf = await lib.getDocument({ data: await file.arrayBuffer() }).promise;
+      const page = await pdf.getPage(1), vp0 = page.getViewport({ scale: 1 });
+      const vp = page.getViewport({ scale: longEdge / Math.max(vp0.width, vp0.height) });
+      const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      const x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height);
+      await page.render({ canvasContext: x, viewport: vp }).promise;
+      if (pdf.numPages > 1) toast(`PDF de ${pdf.numPages} pages : seule la première est utilisée comme image.`, 5000);
+      return cv;
+    } finally { m.remove(); }
+  }
+  // une image (JPG, PNG… ou PDF) → version écran (2000 px) + version détaillée pour le zoom (4000 px)
   async function processImage(file, name) {
-    const im = await loadImage(file), w = im.naturalWidth, hh = im.naturalHeight;
+    const im = isPdf(file) ? await pdfFirstPage(file) : await loadImage(file);
+    const w = im.naturalWidth || im.width, hh = im.naturalHeight || im.height;
     const base = `assets/cartes/${slug(name)}-${stamp()}`;
     const cv1 = drawTo(im, w, hh, 2000), cv2 = drawTo(im, w, hh, 4000);
     addFile(base + '.jpg', await toJpeg(cv1, .86));
@@ -239,12 +257,15 @@ window.PF_EDIT = true;
     } finally { m.remove(); }
   }
   const isPdf = f => f && (f.type === 'application/pdf' || /\.pdf$/i.test(f.name));
-  const isImg = f => f && /^image\//.test(f.type);
-  async function mediaFrom(file, name) {
-    if (isPdf(file)) return processPdf(file, name);
+  const isImg = f => f && (/^image\//.test(f.type) || /\.(jpe?g|jfif|png|webp|gif|svg|avif|bmp)$/i.test(f.name));
+  // asImage : la place attend une image (carte) → un PDF y devient une image (sa première page) ;
+  // sinon (documents) un PDF devient un cahier à feuilleter
+  async function mediaFrom(file, name, asImage) {
+    if (isPdf(file)) return asImage ? processImage(file, name) : processPdf(file, name);
     if (isImg(file)) return processImage(file, name);
-    throw new Error('déposez une image (JPG, PNG…) ou un PDF');
+    throw new Error('déposez une image (JPG, JPEG, PNG…) ou un PDF');
   }
+  const ACCEPT = 'image/*,.jpg,.jpeg,.png,.pdf,application/pdf';
 
   /* ---------- volets : nombre d'éléments, ajout, remplacement ---------- */
   function syncCount(k) {
@@ -260,7 +281,7 @@ window.PF_EDIT = true;
     const k = PF.k; if (k == null) return;
     const v = C.volets[k];
     try {
-      const media = await mediaFrom(file, file.name.replace(/\.[^.]+$/, ''));
+      const media = await mediaFrom(file, file.name.replace(/\.[^.]+$/, ''), v.kind === 'map');
       v.items.push({ ...media, title: 'Titre de l’élément', sub: 'Contexte - Mois Année', tags: ['Mot-clé'], notes: [] });
       syncCount(k); changed();
       PF.rebuildVolet(v.items.length - 1);
@@ -271,7 +292,7 @@ window.PF_EDIT = true;
   async function replaceMedia(i, file) {
     const k = PF.k, it = C.volets[k].items[i];
     try {
-      const media = await mediaFrom(file, it.title);
+      const media = await mediaFrom(file, it.title, (it.type || C.volets[k].kind) === 'map');
       ['src', 'hd', 'hdh', 'pages'].forEach(f => delete it[f]);
       Object.assign(it, media);
       changed(); PF.rebuildVolet(i);
@@ -279,10 +300,15 @@ window.PF_EDIT = true;
     } catch (e) { toast('Remplacement impossible : ' + e.message, 6000); }
   }
   async function replaceCalque(k, file) {
-    if (!isImg(file)) return toast('Déposez une image (PNG transparent conseillé).');
-    const ext = (file.name.match(/\.(png|jpe?g|svg|webp)$/i) || [, 'png'])[1].toLowerCase();
+    if (!isImg(file) && !isPdf(file)) return toast('Déposez une image (PNG transparent conseillé, JPG, JPEG) ou un PDF.');
+    let blob = file, ext = (file.name.match(/\.(png|jpe?g|svg|webp)$/i) || [, 'png'])[1].toLowerCase();
+    if (isPdf(file)) {   // première page du PDF, en PNG de 2000 px
+      try { const cv = await pdfFirstPage(file, 2000); blob = await new Promise(r => cv.toBlob(r, 'image/png')); ext = 'png'; }
+      catch (e) { return toast('PDF illisible : ' + e.message, 6000); }
+    }
+    if (ext === 'jpeg') ext = 'jpg';
     const path = `assets/calques/calque-${C.volets[k].id}-${stamp()}.${ext}`;
-    addFile(path, file);
+    addFile(path, blob);
     C.volets[k].calque = path; PF.setCalque(k); changed();
     toast('Motif du calque remplacé.');
   }
@@ -469,7 +495,7 @@ window.PF_EDIT = true;
         e.stopPropagation();
         const b = e.target.closest('[data-t]'); if (!b) return;
         if (b.dataset.t === 'open') PF.openVolet(k);
-        else { const f = await pickFile('image/*'); if (f) replaceCalque(k, f); }
+        else { const f = await pickFile(ACCEPT); if (f) replaceCalque(k, f); }
       });
       dropZone(row, f => replaceCalque(k, f));
     });
@@ -491,7 +517,7 @@ window.PF_EDIT = true;
       sl.querySelectorAll('.note').forEach(decorateNote);
       if (s.kind === 'add') {
         const card = $('.addcard', sl);
-        card.onclick = async () => { const f = await pickFile('image/*,application/pdf,.pdf'); if (f) addItem(f); };
+        card.onclick = async () => { const f = await pickFile(ACCEPT); if (f) addItem(f); };
         dropZone(card, addItem);
         return;
       }
@@ -499,9 +525,9 @@ window.PF_EDIT = true;
       decorateTxt(sl, s.i);
       const objin = $('.objin', sl);
       const isDoc = s.kind === 'doc';
-      const btn = h(`<div class="ed-ui ed-tools ed-mediatools"><button type="button">${isDoc ? 'Remplacer le PDF' : 'Remplacer l’image'}</button><span>ou déposez un fichier sur ${isDoc ? 'le document' : 'la carte'}</span></div>`);
+      const btn = h(`<div class="ed-ui ed-tools ed-mediatools"><button type="button">${isDoc ? 'Remplacer le PDF' : 'Remplacer l’image'}</button><span>${isDoc ? 'PDF, ou déposez-le sur le document' : 'JPG, PNG ou PDF, ou déposez-le sur la carte'}</span></div>`);
       objin.appendChild(btn);
-      btn.querySelector('button').onclick = async () => { const f = await pickFile('image/*,application/pdf,.pdf'); if (f) replaceMedia(s.i, f); };
+      btn.querySelector('button').onclick = async () => { const f = await pickFile(ACCEPT); if (f) replaceMedia(s.i, f); };
       dropZone(objin, f => replaceMedia(s.i, f));
     });
     if (ui.panel.classList.contains('on')) renderOrder();
