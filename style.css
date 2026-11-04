@@ -1,0 +1,199 @@
+:root {
+  --bg: #f4f4f4; --ink: #464646; --ink-2: #828282; --ink-3: #b9b9b9; --teal: #4f9e99;
+  --out: cubic-bezier(.23, 1, .32, 1);
+  --io: cubic-bezier(.72, 0, .18, 1);
+  --gx: clamp(20px, 5.2vw, 104px);
+  /* position de la pile sur l'accueil */
+  --sx: 13vw; --sy: 11vh; --sc: .38; --gap: 34vh;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+html { font-family: "Inter", system-ui, sans-serif; color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); overscroll-behavior: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: inherit; }
+/* pas d'encadré au focus : le survol (couleur, soulignement) sert aussi au clavier */
+:focus, :focus-visible { outline: none; }
+/* curseur unique, partout : flèche pleine aux angles arrondis, liseré blanc (lisible sur les cartes sombres) */
+html, html * { cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='26'%20height='26'%20viewBox='0%200%2026%2026'%3E%3Cpath%20d='M4.5%203.5%20L5.6%2021%20L9.6%2016.4%20L17.2%2016%20Z'%20fill='%23fff'%20stroke='%23fff'%20stroke-width='5'%20stroke-linejoin='round'/%3E%3Cpath%20d='M4.5%203.5%20L5.6%2021%20L9.6%2016.4%20L17.2%2016%20Z'%20fill='%23525252'%20stroke='%23525252'%20stroke-width='2'%20stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, default !important; }
+.back:focus-visible, .nav:focus-visible, .restart:focus-visible, .contact a:focus-visible { color: var(--teal); }
+
+/* ================= accueil : pile de calques en vue éclatée ================= */
+.stage { position: fixed; inset: 0; z-index: 0; perspective: 2400px; overflow: hidden; }
+.tilt { position: absolute; inset: 0; transform-style: preserve-3d; }
+.scene { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d;
+  transform: translate3d(var(--sx), var(--sy), 0) scale(var(--sc)) rotateX(56deg) rotateZ(-38deg);
+  transition: transform 1150ms var(--io); }
+.scene.flat { transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateZ(0deg); }
+
+.layer { position: absolute; left: -50vw; top: -50vh; width: 100vw; height: 100vh; cursor: pointer;
+  transform: translateZ(calc(var(--z) * var(--gap) + var(--lift, 0vh)));
+  background-color: rgba(255,255,255,.5); outline: 3px solid rgba(70,70,70,.32); outline-offset: -3px;
+  transition: transform 800ms var(--out), opacity 500ms ease, background-color 600ms ease, outline-color 400ms ease; }
+.layer[data-k="2"] { background-color: #fbfbfb; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 30px 60px 120px rgba(40,44,46,.16); }
+.layer .paint { position: absolute; inset: 0; transition: opacity 600ms ease; will-change: opacity; }
+.layer .paint img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+.layer .tint { position: absolute; inset: 0; background: var(--teal); opacity: 0; transition: opacity 400ms ease; will-change: opacity; }
+.layer .cn { position: absolute; width: 0; height: 0; }
+.layer.hi { outline-color: var(--teal); }
+.layer.hi .tint { opacity: .1; }
+.layer.dim { opacity: .42; }
+/* entrée : les calques tombent en place */
+.layer.pre { transform: translateZ(calc(var(--z) * var(--gap) + 110vh)); opacity: 0; transition: none; }
+
+/* ouverture : la pile se met à plat, le calque choisi devient la table */
+.scene.flat .layer { transition: transform 1150ms var(--io), opacity 600ms ease, background-color 700ms ease 300ms, outline-color 500ms ease, box-shadow 600ms ease; }
+.scene.flat .layer.sel { transform: translateZ(0); background-color: var(--bg); outline-color: transparent; box-shadow: none; }
+.scene.flat .layer.sel .paint { opacity: 0; transition: opacity 800ms ease 200ms; }
+.scene.flat .layer.up { transform: translateZ(calc(var(--z) * var(--gap) + 30vh)); opacity: 0; transition-duration: 1150ms, 380ms; }
+.scene.flat .layer.down { opacity: 0; }
+body.in-volet .layer { cursor: default; pointer-events: none; }
+.layer { pointer-events: none; }
+.lhit { position: absolute; left: -50vw; top: -50vh; width: 100vw; height: 100vh; transform: translateZ(calc(var(--z) * var(--gap))); }
+body.in-volet .lhit { pointer-events: none; }
+
+/* légende à gauche, reliée aux calques */
+.home { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.home > * { pointer-events: auto; opacity: 0; translate: 0 12px; transition: opacity 600ms ease, translate 800ms var(--out); }
+.ready .home > * { opacity: 1; translate: 0 0; }
+.ready .home .legend { transition-delay: 450ms; }
+.ready .home .contact { transition-delay: 650ms; }
+body.in-volet .home > * { opacity: 0; pointer-events: none; transition-delay: 0s; transition-duration: 300ms; }
+
+.who { position: absolute; left: var(--gx); top: clamp(24px, 6vh, 64px); }
+.who .kicker { font-size: clamp(30px, 2.8vw, 54px); font-weight: 600; letter-spacing: -.025em; line-height: 1; color: var(--ink); margin-bottom: 14px; }
+.who .name { font-size: 17px; font-weight: 600; letter-spacing: -.005em; }
+.who .role { font-size: 14px; font-weight: 300; color: var(--ink-2); margin-top: 4px; }
+
+.legend { position: absolute; left: var(--gx); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: clamp(18px, 4.4vh, 48px); }
+.row { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 6px 0; transition: opacity 300ms ease; }
+.row .t { font-size: clamp(20px, 1.75vw, 32px); font-weight: 600; letter-spacing: -.015em; line-height: 1.15;
+  background: linear-gradient(var(--teal), var(--teal)) 0 100% / 0 1.5px no-repeat; padding-bottom: 3px;
+  transition: color 250ms ease, background-size 450ms var(--out); }
+.row .c { font-size: clamp(13px, .9vw, 16px); font-weight: 300; color: var(--ink-2); }
+.row.dim { opacity: .35; }
+.row.hi .t { color: var(--teal); background-size: 100% 1.5px; }
+.row:active .t { translate: 0 1px; }
+
+.leaders { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0; transition: opacity 600ms ease 500ms; }
+.ready .leaders { opacity: 1; }
+body.in-volet .leaders { opacity: 0; transition: opacity 200ms ease; }
+.leaders line { stroke: #a9a9a9; stroke-width: 1; stroke-dasharray: 2 4; transition: stroke 250ms ease; }
+.leaders circle { fill: var(--bg); stroke: #7d7d7d; stroke-width: 1.2; transition: stroke 250ms ease, fill 250ms ease; }
+.leaders .hi line { stroke: var(--teal); stroke-dasharray: none; }
+.leaders .hi circle { fill: var(--teal); stroke: var(--teal); }
+
+.contact { position: absolute; left: var(--gx); bottom: clamp(20px, 5vh, 56px); }
+.contact a { display: block; width: 26px; height: 26px; margin: -6px; padding: 6px; box-sizing: content-box; color: #8c8c8c; transition: color 200ms ease, translate 300ms var(--out); }
+.contact a svg { display: block; width: 100%; height: 100%; }
+.contact a:hover { color: var(--ink); translate: 0 -2px; }
+
+/* ================= volet : réalisations posées sur la table ================= */
+.volet { position: fixed; inset: 0; z-index: 3; visibility: hidden; pointer-events: none; transition: visibility 0s linear 400ms; }
+.volet.show { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+.volet .track { position: absolute; inset: 0; will-change: transform; }
+.slide { position: absolute; top: 0; width: 100%; height: 100%; }
+
+.vbar { position: absolute; top: 0; left: 0; right: 0; height: clamp(64px, 10vh, 96px); z-index: 5; display: flex; align-items: center; gap: 24px; padding: 0 var(--gx);
+  opacity: 0; translate: 0 -8px; transition: opacity 300ms ease, translate 500ms var(--out); }
+.volet.show .vbar { opacity: 1; translate: 0 0; transition-delay: 250ms; }
+.back { position: relative; display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); padding: 8px 0; transition: color 200ms ease; }
+/* zones cliquables élargies, invisibles : le visuel ne change pas */
+.back::before, .nav::before, .restart::before { content: ""; position: absolute; }
+.back::before { inset: -18px -22px -18px -26px; }
+.back svg { width: 18px; transition: translate 300ms var(--out); }
+.back:hover { color: var(--ink); }
+.back:hover svg { translate: -4px 0; }
+.vname { font-size: 14px; font-weight: 500; padding-left: 24px; border-left: 1px solid #d8d8d8; }
+.count { margin-left: auto; font-size: 14px; font-weight: 300; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* l'objet */
+.obj { position: absolute; left: 50%; top: 50%; translate: -50% -50%; will-change: transform; pointer-events: none; }  /* seuls la carte et les pages captent la souris : le texte à côté reste sélectionnable */
+.obj .mapfig { pointer-events: auto; }
+.objin { opacity: 0; translate: 0 48px; transition: opacity 500ms ease, translate 900ms var(--out); }
+.volet.show .objin { opacity: 1; translate: 0 0; }
+.mapfig { position: relative; background: #fff; cursor: zoom-in; will-change: transform; box-shadow: 0 2px 4px rgba(30,30,30,.06); }
+/* survol : ombre soulevée (fondu entre deux ombres figées) ; l'inclinaison est calculée en JS */
+.mapfig::before, .mapfig::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; will-change: opacity; transition: opacity 700ms var(--out); }
+.mapfig::before { box-shadow: 0 30px 70px -18px rgba(30,30,30,.30), 0 0 90px rgba(30,30,30,.10); }
+.mapfig::after { box-shadow: 40px 50px 80px -24px rgba(30,30,30,.34), 0 0 90px rgba(30,30,30,.10); opacity: 0; }
+.mapfig:hover::before { opacity: 0; }
+.mapfig:hover::after { opacity: 1; }
+.mapfig img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; will-change: transform; }
+/* carte en grand */
+.mapzoom { position: fixed; inset: 0; z-index: 20; overflow: hidden; perspective: 1800px; cursor: zoom-out; }
+.mapzoom::before { content: ""; position: absolute; inset: 0; background: var(--bg); opacity: 0; will-change: opacity; transition: opacity 500ms ease; }
+.mapzoom.on::before { opacity: .86; }   /* on devine encore le volet derrière */
+.mapzoom img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; user-select: none;  /* sans will-change : l'image est redessinée nette à chaque niveau de zoom */
+ 
+  box-shadow: 0 30px 70px -18px rgba(30,30,30,.3); }
+.bookhost { position: relative; }
+.blank { display: grid; place-items: center; padding: 32px; border: 1px dashed var(--ink-3); color: var(--ink-2); font-size: 15px; font-weight: 300; text-align: center; }
+
+/* le texte, à gauche de l'objet, aligné à droite */
+.txt { will-change: transform, opacity; position: absolute; right: calc(50% + var(--ow) / 2 + 3.8vw); top: 50%; width: var(--tw, 20vw); text-align: right;
+  transform: translate(var(--px, 0px), -50%); opacity: var(--vis, 1); transition: opacity 350ms ease, translate 500ms var(--out); }
+.slide.doc .txt { top: calc(50% - var(--oh) / 2 + var(--oh) * .14); transform: translate(var(--px, 0px), 0); }
+.slide.open .txt { opacity: 0; translate: -28px 0; pointer-events: none; }
+.txtin { opacity: 0; translate: 0 18px; transition: opacity 500ms ease 150ms, translate 900ms var(--out) 150ms; }
+.volet.show .txtin { opacity: 1; translate: 0 0; }
+.txt h2 { font-size: clamp(19px, 1.45vw, 30px); font-weight: 600; line-height: 1.2; letter-spacing: -.012em; color: var(--ink); text-wrap: balance; }
+.txt .sub { margin-top: 1.5em; font-size: clamp(14px, 1vw, 20px); font-weight: 300; line-height: 1.35; color: var(--ink-2); text-wrap: pretty; }
+.txt ul { margin-top: 2.6em; list-style: disc inside; font-size: clamp(14px, 1vw, 20px); line-height: 1.5; color: var(--ink); }
+.txt li::marker { font-size: .8em; }
+
+/* navigation */
+.nav { position: absolute; top: 50%; translate: 0 -50%; z-index: 4; padding: 20px; color: var(--ink); opacity: 0; transition: opacity 300ms ease; }
+.nav::before { top: -70px; bottom: -70px; left: -14px; right: -14px; }
+.prev::before { left: -48px; } .next::before { right: -48px; }
+.nav svg { display: block; width: clamp(18px, 1.5vw, 28px); transition: translate 300ms var(--out), scale 150ms ease; }
+.prev { left: calc(var(--gx) - 20px); }
+.next { right: calc(var(--gx) - 20px); }
+.volet.show .nav { opacity: 1; transition-delay: 400ms, 0s; }
+.prev:hover svg { translate: -5px 0; }
+.next:hover svg { translate: 5px 0; }
+.nav:active svg { scale: .94; }
+.volet.at-start .prev, .volet.at-end .next { opacity: 0 !important; pointer-events: none; transition-delay: 0s; }
+.restart { position: absolute; top: 50%; right: calc(var(--gx) - 12px); translate: 0 -50%; z-index: 4; display: flex;
+  padding: 12px; color: var(--ink-2); opacity: 0; pointer-events: none; transition: opacity 300ms ease, color 200ms ease; }
+.restart::before { inset: -40px -46px -40px -30px; }
+.restart svg { width: 22px; transition: rotate 500ms var(--out); }
+.restart:hover { color: var(--ink); }
+.restart:hover svg { rotate: -120deg; }
+.volet.show.at-end .restart { opacity: 1; pointer-events: auto; transition-delay: 350ms, 0s; }
+
+/* ================= petits écrans ================= */
+@media (max-width: 760px) {
+  :root { --sx: 0vw; --sy: -14vh; --sc: .62; --gap: 26vh; }
+  .legend { top: auto; bottom: 64px; transform: none; gap: 14px; }
+  .leaders { display: none; }
+  .obj { top: 40%; }
+  .txt, .slide.doc .txt { right: auto; left: 50%; top: auto; bottom: 7vh; width: 86vw; text-align: center; transform: translate(calc(-50% + var(--px, 0px)), 0); }
+  .txt .sub { margin-top: .6em; }
+  .txt ul { margin-top: .8em; }
+  .nav { top: 40%; padding: 12px; }
+  .prev { left: 2px; } .next { right: 2px; }
+  .vname { display: none; }
+}
+
+/* ================= contenu éditable : sauts de ligne, réglages par élément ================= */
+[data-bind] { white-space: pre-line; }
+.row { cursor: pointer; }
+/* texte autour de l'objet : décalage et taille choisis dans l'atelier */
+.txt { translate: var(--ex, 0px) var(--ey, 0px); }
+.slide.open .txt { translate: calc(var(--ex, 0px) - 28px) var(--ey, 0px); }
+.txt h2 { font-size: calc(clamp(19px, 1.45vw, 30px) * var(--fk, 1)); }
+.txt .sub, .txt ul { font-size: calc(clamp(14px, 1vw, 20px) * var(--fk, 1)); }
+/* boîtes de texte libres, posées sur le fond de la page */
+.hnotes { position: absolute; inset: 0; pointer-events: none !important; }
+.note { position: absolute; z-index: 2; pointer-events: auto; font-size: max(11px, calc(var(--fs, 16) * 100vw / 1440)); line-height: 1.4; color: var(--ink); }
+.slide .note { opacity: 0; transition: opacity 500ms ease 200ms; }
+.volet.show .slide .note { opacity: 1; }
+.addcard { gap: 6px; align-content: center; cursor: pointer; transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease; }
+.addcard .plus { font-size: 54px; font-weight: 200; line-height: 1; }
+.addcard small { font-size: 12px; color: var(--ink-3); }
+.obj .addcard { pointer-events: auto; }
+@media (max-width: 760px) {
+  .txt { translate: 0 0; }
+  .slide.open .txt { translate: -28px 0; }
+}

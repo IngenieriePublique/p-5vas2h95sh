@@ -1,0 +1,43 @@
+FEUILLES DE L'ACCUEIL : comment changer leurs motifs
+=====================================================
+
+Les trois feuilles empilées de la page d'accueil affichent ces images :
+
+  calque-cartographique.png   feuille du dessus   (Volet cartographique)
+  calque-ingenierie.png       feuille du milieu   (Volet ingénierie territoriale)
+  calque-evaluation.png       feuille du dessous  (Volet évaluation)
+
+Pour changer un motif : dans l'atelier (page d'édition), survole le nom du volet
+sur l'accueil et clique « Motif du calque » (ou dépose l'image sur le nom),
+puis « Publier ».
+
+Format conseillé
+- PNG à fond transparent : la feuille est déjà blanche translucide derrière,
+  avec son contour gris. Dessine seulement le motif (traits, aplats).
+- 1600 x 1000 px (rapport 16:10). Une image d'un autre format est recadrée
+  au centre pour remplir la feuille, rien n'est déformé.
+- Inutile d'aller plus grand : sur l'accueil, la feuille est vue en petit et
+  inclinée ; à l'ouverture d'un volet, le motif s'efface.
+
+Poids : viser moins de 150 Ko par image
+- Un PNG exporté directement (QGIS, Illustrator, Photoshop...) pèse souvent
+  200 à 500 Ko. Passe-le dans un compresseur de PNG par réduction de palette,
+  sans perte visible : TinyPNG (tinypng.com), Squoosh (squoosh.app, réglage
+  « Reduce palette ») ou pngquant. Les motifs actuels sont passés
+  de 470 à 80 Ko de cette façon.
+- Moins il y a de couleurs et de dégradés, plus le fichier est léger :
+  traits nets, aplats, quelques teintes.
+
+Autre possibilité : le SVG
+- Si ton motif est vectoriel (export SVG depuis QGIS, Illustrator, Inkscape),
+  tu peux utiliser un .svg à la place du .png : souvent plus léger, et net à
+  toutes les tailles. Il se dépose dans l'atelier comme un PNG.
+- Un SVG très détaillé (des milliers de traits) peut au contraire être lourd
+  et lent à afficher : dans ce cas, reste en PNG.
+
+Le dossier « sources-calques » (à côté du dossier « site », hors du site
+pour ne pas être mis en ligne) contient les motifs actuels en SVG, pour t'en servir
+comme base (Inkscape, Illustrator). Il n'est pas utilisé par le site.
+
+Mise en ligne : publie le dossier « site » en entier ; les images de ce
+dossier partent avec.

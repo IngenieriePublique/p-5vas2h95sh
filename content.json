@@ -1,0 +1,138 @@
+{
+ "home": {
+  "kicker": "Portfolio",
+  "name": "Germain Paravis",
+  "role": "Master 2 Ingénierie du Développement Territorial",
+  "linkedin": "https://www.linkedin.com/in/germain-p-74b40620a",
+  "notes": []
+ },
+ "labels": {
+  "back": "Volets"
+ },
+ "volets": [
+  {
+   "id": "cartographique",
+   "name": "Volet cartographique",
+   "count": "2 cartes",
+   "kind": "map",
+   "calque": "assets/calques/calque-cartographique.png",
+   "emptyText": "Les cartes seront présentées ici.",
+   "items": [
+    {
+     "type": "map",
+     "src": "assets/carte2.jpg",
+     "hd": "assets/carte2_hd.jpg",
+     "hdh": 2476,
+     "ratio": 1.4154281670205238,
+     "title": "Cartographie esthétique",
+     "sub": "Master 2 Ingénierie du Développement Territorial - Mars 2026",
+     "tags": [
+      "QGIS",
+      "SIG"
+     ],
+     "notes": []
+    },
+    {
+     "type": "map",
+     "src": "assets/carte1.jpg",
+     "hd": "assets/carte1_hd.jpg",
+     "hdh": 2551,
+     "ratio": 1.4111762676785098,
+     "title": "Foncier disponible au Fleix",
+     "sub": "Stage à la CA Bergeracoise - Août 2026",
+     "tags": [
+      "QGIS",
+      "Analyse foncière"
+     ],
+     "notes": []
+    }
+   ],
+   "emptyTitle": "En préparation",
+   "emptySub": ""
+  },
+  {
+   "id": "ingenierie",
+   "name": "Volet ingénierie territoriale",
+   "count": "2 documents",
+   "kind": "doc",
+   "calque": "assets/calques/calque-ingenierie.png",
+   "emptyText": "Les documents seront présentés ici.",
+   "items": [
+    {
+     "type": "doc",
+     "pages": [
+      "assets/doc2/p01.jpg",
+      "assets/doc2/p02.jpg",
+      "assets/doc2/p03.jpg",
+      "assets/doc2/p04.jpg",
+      "assets/doc2/p05.jpg",
+      "assets/doc2/p06.jpg",
+      "assets/doc2/p07.jpg",
+      "assets/doc2/p08.jpg",
+      "assets/doc2/p09.jpg",
+      "assets/doc2/p10.jpg",
+      "assets/doc2/p11.jpg",
+      "assets/doc2/p12.jpg",
+      "assets/doc2/p13.jpg",
+      "assets/doc2/p14.jpg",
+      "assets/doc2/p15.jpg",
+      "assets/doc2/p16.jpg",
+      "assets/doc2/p17.jpg",
+      "assets/doc2/p18.jpg",
+      "assets/doc2/p19.jpg"
+     ],
+     "ratio": 0.6923076923076923,
+     "title": "Conception d’un projet de revitalisation de centre-bourg",
+     "sub": "Master 2 Ingénierie du Développement Territorial - Novembre 2026",
+     "tags": [
+      "Diagnostic territorial",
+      "Ingénierie de projet",
+      "Évaluation financière"
+     ],
+     "notes": []
+    },
+    {
+     "type": "doc",
+     "pages": [
+      "assets/doc1/p01.jpg",
+      "assets/doc1/p02.jpg",
+      "assets/doc1/p03.jpg",
+      "assets/doc1/p04.jpg",
+      "assets/doc1/p05.jpg",
+      "assets/doc1/p06.jpg",
+      "assets/doc1/p07.jpg",
+      "assets/doc1/p08.jpg",
+      "assets/doc1/p09.jpg",
+      "assets/doc1/p10.jpg",
+      "assets/doc1/p11.jpg",
+      "assets/doc1/p12.jpg",
+      "assets/doc1/p13.jpg",
+      "assets/doc1/p14.jpg",
+      "assets/doc1/p15.jpg"
+     ],
+     "ratio": 0.6923076923076923,
+     "title": "Le Pays basque en 12 indicateurs",
+     "sub": "Portrait de territoire pour Bidasoa activa - Avril 2026",
+     "tags": [
+      "Diagnostic territorial",
+      "Analyse statistique"
+     ],
+     "notes": []
+    }
+   ],
+   "emptyTitle": "En préparation",
+   "emptySub": ""
+  },
+  {
+   "id": "evaluation",
+   "name": "Volet évaluation",
+   "count": "en préparation",
+   "kind": "doc",
+   "calque": "assets/calques/calque-evaluation.png",
+   "emptyText": "Les travaux d’évaluation seront présentés ici.",
+   "items": [],
+   "emptyTitle": "Travaux d’évaluation",
+   "emptySub": "En préparation"
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+.fb { pointer-events: none; position: relative; width: 100%; height: 100%; display: flex; align-items: flex-start; justify-content: flex-start; user-select: none; touch-action: pan-y; }
+.fb-shift { will-change: transform; pointer-events: none; }
+.fb-book { position: relative; perspective: 2600px; transform-style: preserve-3d; pointer-events: none; }
+/* seules les moitiés occupées par une page captent le pointeur */
+.fb-hit { position: absolute; top: 0; bottom: 0; width: 50%; z-index: 1200; pointer-events: auto; cursor: grab; }
+.fb-hit:active { cursor: grabbing; }
+.fb-hit.l { left: 0; } .fb-hit.r { left: 50%; }
+.fb-hit.off { pointer-events: none; }
+
+/* ombre du cahier posé : contact serré + diffusion large ; une par moitié présente */
+.fb-sh { position: absolute; top: 0; bottom: 0; width: 50%; pointer-events: none; will-change: transform, opacity;
+  box-shadow: 0 1px 2px rgba(30,32,34,.12), 0 14px 22px -10px rgba(30,32,34,.24), 0 46px 70px -26px rgba(30,32,34,.42), 0 90px 110px -50px rgba(30,32,34,.30); }
+/* ombre au sol plus dense sous la reliure, là où le cahier s'enfonce */
+.fb-sh.l::after, .fb-sh.r::after { content: ""; position: absolute; bottom: -26px; height: 46px; width: 55%; filter: blur(14px); border-radius: 50%; }
+.fb-sh.l::after { right: -6%; background: radial-gradient(ellipse at 100% 40%, rgba(30,32,34,.32), transparent 70%); }
+.fb-sh.r::after { left: -6%; background: radial-gradient(ellipse at 0 40%, rgba(30,32,34,.32), transparent 70%); }
+.fb-sh.l { left: 0; transform-origin: 100% 50%; } .fb-sh.r { left: 50%; transform-origin: 0 50%; }
+/* creux de la reliure */
+.fb-book::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; z-index: 1100; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.20) 50%, rgba(0,0,0,.10)); opacity: var(--spine, 1); transition: opacity 200ms ease; }
+
+/* feuille = chaîne de bandes ; chaque bande pivote sur son bord gauche */
+.fb-leaf { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; transform-style: preserve-3d; pointer-events: none; }
+.fb-strip { position: absolute; top: 0; height: 100%; width: calc(var(--sw) + 2px); transform-origin: 0 50%; transform-style: preserve-3d; }
+.fb-strip.first { left: 0; }
+.fb-strip .fb-strip { left: var(--sw); }
+.fb-strip.last { width: var(--sw); } /* bord libre : pas de débord hors de la page */
+.fb-f, .fb-b { position: absolute; inset: 0; display: block; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background-color: #fdfdfc; background-repeat: no-repeat; background-size: var(--pw) var(--ph), var(--pw) var(--ph); }
+.fb-b { transform: rotateY(180deg); }
+/* lumière : assombrissement calculé selon l'angle de chaque bande */
+.fb-f > b, .fb-b > b { position: absolute; inset: 0; opacity: 0; background: #16181a; pointer-events: none; }
+
+/* ombre portée par une feuille en mouvement sur la page dessous */
+.fb-cast { position: absolute; top: 0; left: 0; height: 100%; z-index: 499; pointer-events: none; opacity: 0; will-change: transform, opacity; transform-origin: 50% 50%;
+  background: linear-gradient(90deg, rgba(20,22,24,.30), rgba(20,22,24,.08) 35%, rgba(20,22,24,0)); }
+
+/* tranches : épaisseur des feuilles restantes */
+.fb-edge { position: absolute; top: 1px; bottom: 1px; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(90deg, #f7f7f5 0 1px, #d9d9d6 1px 1.5px); transition: width .3s ease; }
+.fb-edge.r { left: 100%; border-radius: 0 1px 1px 0; }
+.fb-edge.l { right: 100%; border-radius: 1px 0 0 1px; }
+
+/* coin attrapé au survol : pli en diagonale fait de bandes articulées */
+.fb-curl { position: absolute; top: 0; width: 50%; height: 100%; z-index: 900; pointer-events: none; transform-style: preserve-3d; visibility: hidden; transform: translateZ(1px); }
+.fb-curl.on { visibility: visible; }
+.fb-curl.drop .fb-cbase, .fb-curl.drop .fb-cwrap { display: none; }
+.fb-cwrap { position: absolute; inset: 0; overflow: hidden; }
+.fb-cs { position: absolute; left: 0; top: 0; transform-origin: 0 0; opacity: 0;
+  background: linear-gradient(90deg, rgba(20,22,24,.42), rgba(20,22,24,.12) 40%, rgba(20,22,24,0)); }
+.fb-cbase, .fb-cf > s { position: absolute; left: 0; top: 0; width: var(--pw); height: var(--ph); display: block; background-color: #fdfdfc; background-repeat: no-repeat;
+  background-size: var(--pw) var(--ph), var(--pw) var(--ph); transform-origin: 0 0; }
+.fb-cb > s { position: absolute; left: 0; top: 0; width: var(--pw); height: var(--ph); display: block; background-color: #fdfdfc; background-repeat: no-repeat;
+  background-size: var(--pw) var(--ph), var(--pw) var(--ph); transform-origin: 0 0; }
+.fb-cf, .fb-cb { position: absolute; left: 0; top: 0; display: block; overflow: hidden; transform-origin: 0 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.fb-cbase > b, .fb-cf b, .fb-cb b { position: absolute; inset: 0; background: #16181a; opacity: 0; }
+
+/* face pleine page affichée au repos (nette), à la place des bandes */
+.fb-flat { position: absolute; top: 0; width: 100%; height: 100%; display: none; background-color: #fdfdfc; background-repeat: no-repeat;
+  background-size: var(--pw) var(--ph), var(--pw) var(--ph); }
+.fb-flat.f { left: 0; } .fb-flat.b { left: -100%; }
+.fb-leaf.rest-f > .fb-flat.f, .fb-leaf.rest-b > .fb-flat.b { display: block; }
+.fb-leaf.rest-f > .fb-strip, .fb-leaf.rest-b > .fb-strip { visibility: hidden; }

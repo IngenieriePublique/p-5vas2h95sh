@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Germain Paravis — Portfolio</title>
+<meta name="description" content="Portfolio en trois volets : cartographie, ingénierie territoriale, évaluation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="flipbook.css?v=50">
+<link rel="stylesheet" href="style.css?v=50">
+</head>
+<body>
+
+<!-- la pile de calques : chaque volet est une couche du SIG -->
+<div class="stage" aria-hidden="true">
+  <div class="tilt">
+    <div class="scene" id="scene"></div>
+  </div>
+</div>
+<svg class="leaders" id="leaders" aria-hidden="true"></svg>
+
+<main class="home" id="home">
+  <header class="who"></header>
+  <div class="hnotes" id="hnotes"></div>
+  <nav class="legend" aria-label="Volets du portfolio" id="legend"></nav>
+  <footer class="contact"><a href="https://www.linkedin.com/in/germain-p-74b40620a" target="_blank" rel="noopener" aria-label="Profil LinkedIn de Germain Paravis">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="3" fill="currentColor"/><g fill="#fff"><circle cx="6.9" cy="6.4" r="1.8"/><rect x="5.4" y="9.3" width="3" height="9.7"/><path d="M10.6 9.3h2.9v1.4c.6-1 1.8-1.7 3.3-1.7 2.6 0 3.6 1.7 3.6 4.4V19h-3v-5.1c0-1.3-.4-2.2-1.6-2.2-1.4 0-2.2 1-2.2 2.4V19h-3z"/></g></svg></a></footer>
+</main>
+
+<section class="volet" id="volet" aria-hidden="true"></section>
+
+<script src="flipbook.js?v=50"></script>
+<script src="app.js?v=50"></script>
+</body>
+</html>
