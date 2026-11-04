@@ -12,7 +12,7 @@
  "volets": [
   {
    "id": "cartographique",
-   "name": "Volet cartographique",
+   "name": "Volet Cartographique",
    "count": "2 cartes",
    "kind": "map",
    "calque": "assets/calques/calque-cartographique.png",
@@ -30,7 +30,10 @@
       "QGIS",
       "SIG"
      ],
-     "notes": []
+     "notes": [],
+     "txt": {
+      "w": 19.98
+     }
     },
     {
      "type": "map",
@@ -52,7 +55,7 @@
   },
   {
    "id": "ingenierie",
-   "name": "Volet ingénierie territoriale",
+   "name": "Volet Ingénierie territoriale",
    "count": "2 documents",
    "kind": "doc",
    "calque": "assets/calques/calque-ingenierie.png",
@@ -125,7 +128,7 @@
   },
   {
    "id": "evaluation",
-   "name": "Volet évaluation",
+   "name": "Volet Evaluation",
    "count": "en préparation",
    "kind": "doc",
    "calque": "assets/calques/calque-evaluation.png",
