@@ -12,7 +12,7 @@
  "volets": [
   {
    "id": "cartographique",
-   "name": "Volet Cartographique",
+   "name": "Volet Cartographie",
    "count": "7 cartes",
    "kind": "map",
    "calque": "assets/calques/calque-cartographique.png",
